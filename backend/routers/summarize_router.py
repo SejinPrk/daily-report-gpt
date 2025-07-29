@@ -21,12 +21,14 @@ class SummarizeResponse(BaseModel):
 
 @router.post("/summarize", response_model=SummarizeResponse)
 async def summarize_text_api(request: SummarizeRequest):
-    summary = summarize_text(request.text)
-    tags = extract_tags(summary)
-    print("[DEBUG] summary =", summary)
+    summary_result = summarize_text(request.text) # dict
+    tags = extract_tags(summary_result["summary"])
+
+    print("[DEBUG] summary =", summary_result)
     print("[DEBUG] tags =", tags)
+
     return SummarizeResponse(
-        summary=summary,
-        tags=tags,
-        feedback="초기 버전으로 요약이 생성되었습니다."
+        summary=summary_result["summary"],   # str
+        tags=tags,                           # List[str]
+        feedback=summary_result["feedback"]  # str
     )
