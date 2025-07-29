@@ -4,7 +4,7 @@ from typing import List
 import re
 from collections import Counter
 
-def extract_tags(summary: str, top_n: int = 3) -> List[str]:
+def extract_tags(summary: str, top_n: int = 5) -> List[str]:
     # Optional: remove '요약:' prefix if present
     if summary.startswith("요약:"):
         summary = summary.replace("요약:", "").strip()
