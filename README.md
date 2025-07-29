@@ -1,10 +1,10 @@
 # DailyReportGPT 📋  
 An AI-powered tool that summarizes intern logs, extracts tags, and generates weekly reports.  
-**AI 기반 회의록/업무일지 요약 및 태그 생성기 프로젝트입니다.**
+AI 기반 회의록/업무일지 요약 및 태그 생성기 프로젝트입니다.
 
 ---
 
-## Overview | 개요
+## Overview
 This project allows users to upload meeting notes or daily reports. The system uses LLMs to:
 - Summarize content (daily or weekly)
 - Extract key task-related tags
@@ -17,17 +17,14 @@ This project allows users to upload meeting notes or daily reports. The system u
 
 ---
 
-## Tech Stack | 기술 스택
-**Backend**
-- Python 3.10, FastAPI, LangChain, Milvus  
-**Frontend**
-- Vue 3, Pinia, TailwindCSS  
-**Embedding Models**
-- BGE-M3, BGE Reranker
+## Tech Stack
+**Backend**: Python 3.10, FastAPI, LangChain, Milvus  
+**Frontend**: Vue 3, Pinia, TailwindCSS  
+**Embedding Models**: BGE-M3, BGE Reranker
 
 ---
 
-## eatures | 주요 기능
+## Features
 - Upload text-based logs or reports | 텍스트 기반 업무일지 업로드
 - Summarize daily/weekly logs | 일일/주간 업무 요약 자동 생성
 - Extract hashtags (e.g., `#meeting`, `#reporting`, `#research`) | 업무 키워드 자동 태그화
@@ -35,7 +32,7 @@ This project allows users to upload meeting notes or daily reports. The system u
 
 ---
 
-## 🚀 Getting Started | 실행 방법
+## Getting Started
 
 ```bash
 # Backend
