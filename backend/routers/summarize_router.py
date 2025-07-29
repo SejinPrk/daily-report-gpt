@@ -4,29 +4,27 @@ from fastapi import APIRouter, Body
 from pydantic import BaseModel
 from typing import List
 
+from backend.services.summarize_service import summarize_text
+
 router = APIRouter()
 
-# 요청 데이터 모델
+# Request data model
 class SummarizeRequest(BaseModel):
     text: str
 
-# 응답 데이터 모델
+# Response data model
 class SummarizeResponse(BaseModel):
     summary: str
     tags: List[str]
     feedback: str
 
 @router.post("/summarize", response_model=SummarizeResponse)
-async def summarize_text(request: SummarizeRequest):
-    input_text = request.text
+async def summarize_text_api(request: SummarizeRequest):
+    summary = summarize_text(request.text)
 
-    # TODO: 이후 LangChain 요약 로직으로 교체할 예정
-    dummy_summary = "요약: 입력된 업무 내용을 기반으로 핵심 내용을 정리했습니다."
-    dummy_tags = ["#회의", "#보고서", "#리서치"]
-    dummy_feedback = "업무 내용이 명확하게 정리되어 있어 좋습니다."
-
+    # todo: 태그, 피드백은 나중에 별도 추론 or 규칙 기반으로 확장
     return SummarizeResponse(
-        summary=dummy_summary,
-        tags=dummy_tags,
-        feedback=dummy_feedback
+        summary=summary,
+        tags=["#done"],
+        feedback="초기 버전으로 요약이 생성되었습니다."
     )
