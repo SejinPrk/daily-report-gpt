@@ -5,19 +5,28 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.llms import HuggingFacePipeline
 from transformers import pipeline
 
-# T5 model: google/flan-t5-base
-summarizer = pipeline("summarization", model="google/flan-t5-base", tokenizer="google/flan-t5-base", device=0)
+summarizer = None
+llm = None
 
-llm = HuggingFacePipeline(pipeline=summarizer)
+def load_model():
+    global summarizer, llm
+    if summarizer is None:
+        print("[INFO] Loading model to GPU...")
+        summarizer = pipeline(
+            "summarization",
+            model="google/flan-t5-base",
+            tokenizer="google/flan-t5-base",
+            device=0  # CUDA:0
+        )
+        llm = HuggingFacePipeline(pipeline=summarizer)
+        print("[INFO] Model loaded.")
 
+# Main function
 def summarize_text(text: str) -> str:
-    # 1. chunk 분할
+    load_model()
+
     splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     docs = splitter.create_documents([text])
 
-    # 2. LangChain 체인 구성
     chain = load_summarize_chain(llm, chain_type="map_reduce")
-
-    # 3. execute
-    summary = chain.run(docs)
-    return summary
+    return chain.run(docs)
