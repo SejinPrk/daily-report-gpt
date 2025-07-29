@@ -1,5 +1,5 @@
 # DailyReportGPT 📋  
-An AI-powered tool that summarizes intern logs, extracts tags, and generates weekly reports.  
+An AI-powered assistant that summarizes meeting minutes, extracts task tags, and generates weekly summaries.
 AI 기반 회의록/업무일지 요약 및 태그 생성기 프로젝트입니다.
 
 ---
