@@ -1,3 +1,5 @@
+# backend/services/summarize_service.py
+
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 import torch
 from typing import List, Dict

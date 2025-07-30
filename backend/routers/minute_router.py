@@ -1,3 +1,5 @@
+# backend/routers/minute_router.py
+
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
 from backend.services.meeting_minute_generator import generate_meeting_minutes
