@@ -1,12 +1,18 @@
 // frontend/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
-import SummarizeView from '../views/SummarizeView.vue'
+import MeetingResultView from "../views/MeetingResultView.vue";
+import MeetingForm from "../views/MeetingForm.vue";
 
 const routes = [
   {
     path: '/',
-    name: 'Summarize',
-    component: SummarizeView
+    name: 'MeetingForm',
+    component: MeetingForm
+  },
+  {
+    path: '/result',
+    name: 'MeetingResult',
+    component: MeetingResultView
   }
 ]
 

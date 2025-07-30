@@ -1,30 +1,24 @@
 # backend/routers/minute_router.py
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter
 from pydantic import BaseModel
 from backend.services.meeting_minute_generator import generate_meeting_minutes
 
 router = APIRouter()
 
 class MeetingMinuteRequest(BaseModel):
-    content: str
-    participants: list[str]
+    date: str
+    author: str
+    participants: str
+    location: str
+    time_range: str
+    raw_text: str
 
-@router.post("/api/minutes", tags=["minutes"])
-async def create_meeting_minutes(request: MeetingMinuteRequest, req: Request):
+@router.post("/minutes", tags=["minutes"])
+async def create_meeting_minutes(request: MeetingMinuteRequest):
     try:
         # LangChain 기반 정리 function call
-        # Todo: 임시로 필요한 필드값 구성 (나중에 프론트에서 받도록 확장 가능)
-        meta = {
-            "date": "2025-08-30",
-            "author": "Sejin",
-            "participants": ", ".join(request.participants),
-            "location": "Corporate / Meeting Room A",
-            "time_range": "09:30 ~ 10:30",
-            "raw_text": request.content
-        }
-
-        minutes = generate_meeting_minutes(meta)
+        minutes = generate_meeting_minutes(request.model_dump())
 
         return {
             "result": True,

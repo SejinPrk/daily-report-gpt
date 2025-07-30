@@ -21,7 +21,7 @@ app.add_middleware(
 
 # router setting
 app.include_router(summarize_router.router, prefix="/api") # summarize router
-app.include_router(minute_router.router) # minute router
+app.include_router(minute_router.router, prefix="/api") # minute router
 
 @app.get("/")
 async def root():
