@@ -10,19 +10,13 @@
       </pre>
     </section>
 
-    <!-- 2. 요약 -->
-    <section>
-      <h2 class="text-xl font-semibold mb-2">📌 요약</h2>
-      <p class="mb-4">{{ summaryData.summary }}</p>
-    </section>
-
-    <!-- 3. 태그 -->
+    <!-- 2. 태그 -->
     <section>
       <h2 class="text-xl font-semibold mb-2">🏷️ 태그</h2>
       <p class="mb-4">{{ summaryData.tags.join(', ') }}</p>
     </section>
 
-    <!-- 4. 피드백 -->
+    <!-- 3. 피드백 -->
     <section>
       <h2 class="text-xl font-semibold mb-2">🗣️ 피드백</h2>
       <p class="mb-4">{{ summaryData.feedback }}</p>
@@ -31,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import {ref, watch} from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 
@@ -43,19 +37,22 @@ const summaryData = ref({
   feedback: ''
 })
 
-onMounted(async () => {
-  try {
-    // 1. 회의록 생성
-    const res1 = await axios.post('/api/minutes', route.query)
-    result.value = res1.data
+watch(
+  () => route.query,
+  async (query) => {
+    if (!query.raw_text) return  // 최소 조건 체크
+    try {
+      const res1 = await axios.post('/api/minutes', query)
+      result.value = res1.data
 
-    // 2. 추가 요약 분석 (SummarizeView 기능 활용)
-    const res2 = await axios.post('/api/summarize', {
-      text: res1.data.minutes
-    })
-    summaryData.value = res2.data
-  } catch (err) {
-    console.error('요약 또는 회의록 생성 오류:', err)
-  }
-})
+      const res2 = await axios.post('/api/summarize', {
+        text: res1.data.minutes
+      })
+      summaryData.value = res2.data
+    } catch (err) {
+      console.error('요약 또는 회의록 생성 오류:', err)
+    }
+  },
+  { immediate: true }
+)
 </script>
