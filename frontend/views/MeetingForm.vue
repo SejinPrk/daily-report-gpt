@@ -1,3 +1,4 @@
+<!--frontend/views/MeetingForm.vue-->
 <template>
   <div class="p-6 max-w-2xl mx-auto">
     <h1 class="text-2xl font-bold mb-4">회의 정보 입력</h1>
@@ -63,8 +64,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import {useMeetingStore} from "@/stores/useMeetingStore";
 
 const router = useRouter()
+const meetingStore = useMeetingStore()
 
 const form = ref({
   date: '',
@@ -87,7 +90,8 @@ const timeOptions = Array.from({ length: 24 }, (_, i) => {
 
 const goToResult = () => {
   form.value.time_range = `${startTime.value} ~ ${endTime.value}`
-  router.push({ name: 'MeetingResult', query: form.value })
+  meetingStore.setFormData({ ...form.value }) // 상태로 저장
+  router.push({ name: 'MeetingResult' })
 }
 </script>
 
