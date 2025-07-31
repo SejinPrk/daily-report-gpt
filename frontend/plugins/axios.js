@@ -1,4 +1,4 @@
-// utils/axios.js
+// frontend/utils/axios.js
 import axios from 'axios'
 
 const axiosInstance = axios.create({
