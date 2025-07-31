@@ -1,3 +1,4 @@
+<!--frontend/view/MeetingResultView.vue-->
 <template>
   <div class="p-6 max-w-3xl mx-auto">
     <h1 class="text-2xl font-bold mb-6">📋 회의 리포트</h1>
@@ -25,34 +26,49 @@
 </template>
 
 <script setup>
-import {ref, watch} from 'vue'
-import { useRoute } from 'vue-router'
+import {ref, watchEffect} from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
+import { useLoadingStore } from '@/stores/useLoadingStore'
+import {useMeetingStore} from "@/stores/useMeetingStore";
 
+const router = useRouter()
 const route = useRoute()
+const meetingStore = useMeetingStore()
+
 const result = ref({})
+const loading = useLoadingStore() // 전역 로딩창
 const summaryData = ref({
   summary: '',
   tags: [],
   feedback: ''
 })
 
-watch(
-  () => route.query,
-  async (query) => {
-    if (!query.raw_text) return  // 최소 조건 체크
-    try {
-      const res1 = await axios.post('/api/minutes', query)
-      result.value = res1.data
+watchEffect(async () => {
+  const formData = meetingStore.formData
 
-      const res2 = await axios.post('/api/summarize', {
-        text: res1.data.minutes
-      })
-      summaryData.value = res2.data
-    } catch (err) {
-      console.error('요약 또는 회의록 생성 오류:', err)
-    }
-  },
-  { immediate: true }
-)
+  if (!formData || !formData.raw_text) {
+    alert('회의 정보가 없습니다. 처음 화면으로 돌아갑니다.')
+    await router.push({name: 'MeetingForm'})
+    return
+  }
+
+  try {
+    loading.show()
+
+    const res1 = await axios.post('/api/minutes', formData)
+    result.value = res1.data
+
+    const res2 = await axios.post('/api/summarize', { text: res1.data.minutes })
+    summaryData.value.summary = res2.data.summary
+    summaryData.value.tags = res2.data.tags
+
+    const res3 = await axios.post('/api/feedback', { meeting_minutes: res1.data.minutes })
+    summaryData.value.feedback = res3.data.feedback
+  } catch (e) {
+    console.error('요약 오류:', e)
+  } finally {
+    loading.hide()
+  }
+})
 </script>

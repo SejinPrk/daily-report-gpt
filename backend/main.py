@@ -2,7 +2,7 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.routers import summarize_router, minute_router
+from backend.routers import summarize_router, minute_router, feedback_router
 
 app = FastAPI(
     title="DailyReportGPT API",
@@ -22,7 +22,7 @@ app.add_middleware(
 # router setting
 app.include_router(summarize_router.router, prefix="/api") # summarize router
 app.include_router(minute_router.router, prefix="/api") # minute router
-
+app.include_router(feedback_router.router, prefix="/api") # feedback router
 @app.get("/")
 async def root():
     return {"message": "Hello from Daily Report GPT!"}
