@@ -5,7 +5,6 @@ from pydantic import BaseModel
 from typing import List
 
 from backend.services.summarize_service import summarize_text
-from backend.services.tag_extractor import extract_tags
 
 router = APIRouter()
 
@@ -19,16 +18,12 @@ class SummarizeResponse(BaseModel):
     tags: List[str]
     feedback: str
 
-@router.post("/summarize", response_model=SummarizeResponse)
+@router.post("/tags", response_model=SummarizeResponse)
 async def summarize_text_api(request: SummarizeRequest):
     summary_result = summarize_text(request.text) # dict
-    tags = extract_tags(summary_result["summary"])
-
-    print("[DEBUG] summary =", summary_result)
-    print("[DEBUG] tags =", tags)
 
     return SummarizeResponse(
         summary=summary_result["summary"],   # str
-        tags=tags,                           # List[str]
+        tags=summary_result["tags"], # str
         feedback=summary_result["feedback"]  # str
     )
