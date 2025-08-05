@@ -1,7 +1,7 @@
 <!-- frontend/components/GlobalLoading.vue -->
 <template>
   <div
-    v-if="loadingStore.isLoading"
+    v-if="loadingStore.isLoading('global')"
     class="fixed inset-0 bg-black bg-opacity-40 z-[9999] flex items-center justify-center"
   >
     <div class="bg-white rounded-xl shadow-xl p-6 flex flex-col items-center animate-fade-in">

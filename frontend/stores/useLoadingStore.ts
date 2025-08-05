@@ -4,15 +4,19 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useLoadingStore = defineStore('loading', () => {
-  const isLoading = ref(false)
+  const loadingMap = ref(new Map<string, boolean>())
 
-  function show() {
-    isLoading.value = true
+  function show(id = 'global') {
+    loadingMap.value.set(id, true)
   }
 
-  function hide() {
-    isLoading.value = false
+  function hide(id = 'global') {
+    loadingMap.value.set(id, false)
   }
 
-  return { isLoading, show, hide }
+  function isLoading(id = 'global') {
+    return loadingMap.value.get(id) || false
+  }
+
+  return { loadingMap, show, hide, isLoading }
 })
